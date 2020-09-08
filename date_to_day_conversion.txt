@@ -1,0 +1,112 @@
+#include<iostream>
+using namespace std;
+
+int get_year(string date)
+{
+    int year=(date[6]-48)*1000+(date[7]-48)*100+(date[8]-48)*10+(date[9]-48);
+    return year;
+}
+
+int get_month(string date)
+{
+    int month=(date[3]-48)*10+(date[4]-48);
+    return month;
+}
+
+int get_date(string date)
+{
+    int date1=(date[0]-48)*10+(date[1]-48);
+    return date1;
+}
+
+bool is_leapyear(int yr)
+{
+    if(yr%400==0)
+        return true;
+    else if(yr%100==0)
+        return false;
+    else if(yr%4==0)
+        return true;
+    else
+        return false;
+}
+int get_first_odd_value(int year)
+{
+    year=year/100;
+    if(year==1)
+        return 5;
+    else if(year==2)
+        return 3;
+    else if(year==3)
+        return 1;
+}
+
+int get_second_odd_value(int year)
+{
+    int leap_years=year/4;
+    int non_leap_years=year-leap_years;
+    return leap_years*2+non_leap_years;
+}
+
+int get_third_odd_value(int yr,int mt,int dt)
+{
+    int ly[]={3,1,3,2,3,2,3,3,2,3,2,3};
+    int nly[]={3,0,3,2,3,2,3,3,2,3,2,3};
+    int i,sum=0;
+    if(is_leapyear(yr))
+    {
+        for(i=0;i<mt-1;i++)
+        {
+            sum+=ly[i];
+        }
+    }
+    else
+    {
+         for(i=0;i<mt-1;i++)
+        {
+            sum+=nly[i];
+        }
+    }
+    return sum+dt;
+}
+
+string get_day(int result)
+{
+    string day;
+    if(result==0)
+        day="Sunday";
+    else if(result==1)
+        day="Monday";
+    else if(result==2)
+        day="Tuesday";
+    else if(result==3)
+        day="Wednesday";
+    else if(result==4)
+        day="Thursday";
+    else if(result==5)
+        day="Friday";
+    else
+        day="Saturday";
+
+   return day;
+}
+int main()
+{
+    string date;
+    cout<<"enter the date in format of dd/mm/yyyy"<<endl;
+    cout<<"taking an example like 16 Aug 1999 as 16/08/1999"<<endl;
+    cin>>date;
+    int yr=get_year(date);
+    int mt=get_month(date);
+    int dt=get_date(date);
+    int year=yr-1;
+    year=year%400;
+    int val1=get_first_odd_value(year);
+    year=year%100;
+    int val2=get_second_odd_value(year);
+    int val3=get_third_odd_value(yr,mt,dt);
+    int result=(val1+val2+val3)%7;
+    string day=get_day(result);
+    cout<<"the day for the given date is "<<day;
+    return 0;
+}
