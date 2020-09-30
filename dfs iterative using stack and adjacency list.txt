@@ -1,0 +1,72 @@
+#include<iostream>
+using namespace std;
+#include<vector>
+#include<stack>
+#include<list>
+addedge(int x,int y,list<int> *li)
+{
+    li[x].push_back(y); // adding from both sides as undirected graph
+    li[y].push_back(x);
+}
+
+void dfs(int src,list<int> *li,int v)
+{
+    stack<int>s;
+    vector<int>visited(v,0);
+    s.push(src);
+    visited[src]=1;
+    while(!s.empty())  // run till stack is not empty
+    {
+        int a=s.top();
+        s.pop();
+        cout<<a<<" ";
+        for(auto it=li[a].begin();it!=li[a].end();it++)
+        {
+            if(visited[*it]==0)  // we will visit it only when it is not visited previously
+            {
+                s.push(*it);
+                visited[*it]=1;
+            }
+        }
+    }
+}
+int main()
+{
+  list<int> *li; // making a doubly linked list pointer (li)
+  int v,i;
+  //getting the number of vertices
+  cout<<"enter the number of vertices you want in the list\n";
+  cin>>v;
+  li=new list<int>[v];  // make li containing (v) blocks of list<int>
+                 // we can say that li contains list of list
+  int x,y;
+  int a=1;
+  // start making the connections
+
+  cout<<"now start entering the connection values in form of u,v for connection between u and v\n";
+  // asking if you want to add connections or not
+  cout<<"enter 1 for continue and 0 for stopping\n";
+  cin>>a;
+  while(a)
+  {
+    cout<<"enter the vertices to connect\n";
+    cin>>x>>y;
+    addedge(x,y,li); // x and y will get ocnnected by an edge
+    cout<<"enter 1 for continue and 0 for stopping\n";
+    cin>>a;
+  }
+
+int src;
+
+cout<<"how many times you want to do dfs\n";
+int n;
+cin>>n;
+for(i=0;i<n;i++)
+{
+    cout<<"enter the source element\n";
+    cin>>src;
+    dfs(src,li,v); // depth first traversal of graph
+                    // we have passed the source element, list pointer and the number of vertices.
+}
+  return 0;
+}
