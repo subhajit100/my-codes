@@ -1,0 +1,73 @@
+#include<iostream>
+using namespace std;
+#include<vector>
+#include<stack>
+#include<list>
+int flag=0; // flag to keep track that cycle formed or not
+addedge(int x,int y,list<int> *li)
+{
+    li[x].push_back(y); // adding from one side as directed graph
+}
+
+void checkcycle(list<int> *li,int i,vector<int>& visited)
+{
+    if(flag==1)  // when flag is 1, it will not let us enter any loop
+        return;
+    if(visited[i]==1)
+    {
+        flag=1;  // if flag=1 that means cycle formed now we have to come out from all loops thus above condition
+        return;  // is applied to come out of any loop of (flag==1)
+    }
+    visited[i]=1;
+    for(auto it=li[i].begin();it!=li[i].end();it++)
+    {
+        checkcycle(li,*it,visited);
+    }
+    visited[i]=0; // backtracking and making it 0 again
+}
+int main()
+{
+  list<int> *li; // making a doubly linked list pointer (li)
+  int v,i;
+  //getting the number of vertices
+  cout<<"enter the number of vertices you want in the list\n";
+  cin>>v;
+  li=new list<int>[v];  // make li containing (v) blocks of list<int>
+                 // we can say that li contains list of list
+  int x,y;
+  int a;
+  // start making the connections
+
+  cout<<"now start entering the connection values in form of u,v for connection between u and v\n";
+  // asking if you want to add connections or not
+  cout<<"enter 1 for continue and 0 for stopping\n";
+  cin>>a;
+  while(a)
+  {
+    cout<<"enter the vertices to connect\n";
+    cin>>x>>y;
+    addedge(x,y,li); // x and y will get ocnnected by an edge
+    cout<<"enter 1 for continue and 0 for stopping\n";
+    cin>>a;
+  }
+
+
+for(i=0;i<v;i++)
+{
+    vector<int>visited(v,0);
+    if(flag==0)
+    {
+        checkcycle(li,i,visited);
+    }
+    else
+        break;
+}
+
+if(flag==1) // based on the flag value deciding whether its a cycle or not.
+{
+    cout<<"cycle exists\n";
+}
+else
+    cout<<"cycle doesnot exist\n";
+  return 0;
+}
