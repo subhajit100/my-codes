@@ -1,0 +1,77 @@
+#include<iostream>
+using namespace std;
+#include<vector>
+
+// function for finding the parent of any node
+
+int findpar(int *arr,int a)
+{
+    while(arr[a]>0)
+        a=arr[a];
+    return a;
+}
+
+// function to do the union of two disjoint sets of nodes
+
+void findunion(int *arr,int x,int y)
+{
+    if(arr[x]<arr[y])
+    {
+        arr[x]=arr[x]+arr[y];
+        arr[y]=x;
+    }
+    else
+    {
+        arr[y]=arr[x]+arr[y];
+        arr[x]=y;
+    }
+}
+
+// this function will add the edges by editing the array, or else if cycle detected will return true.
+
+bool addEdge(int *arr,int a,int b)
+{
+
+    int x=findpar(arr,a);
+    int y=findpar(arr,b);
+
+    if(x==y)        // if parents of both a and b matches then cycle is formed
+        return true;
+    findunion(arr,x,y);
+    return false;
+}
+
+int main()
+{
+    int v,i;
+  //getting the number of vertices
+    cout<<"enter the number of vertices you want in the list\n";
+    cin>>v;
+    int *arr=new int[v];
+    for(i=0;i<v;i++)
+        arr[i]=-1;
+    bool z=false;
+    int x,y;
+    int a;
+  // start making the connections
+    cout<<"now start entering the connection values in form of u,v for connection between u and v\n";
+  // asking if you want to add connections or not
+    cout<<"enter 1 for continue and 0 for stopping\n";
+    cin>>a;
+    while(a)
+  {
+    cout<<"enter the vertices to connect\n";
+    cin>>x>>y;
+    z=addEdge(arr,x,y); // x and y will get ocnnected by an edge if its not a cycle
+    if(z==true)
+    {
+        cout<<"cycle formed in the undirected graph\n";
+        break;
+    }
+    cout<<"enter 1 for continue and 0 for stopping\n";
+    cin>>a;
+  }
+   if(z==false)
+        cout<<"cycle not found\n";
+  return 0;
+}
